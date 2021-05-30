@@ -1,22 +1,32 @@
-import uvicorn as uvicorn
 from fastapi import FastAPI
-from api.currencies import data_base
-from api.exchange import exist_currency, exchange
+from api.db_currencies import db_currencies
+from api.exchange import exist_currency, exchange, find_currency
 
 app = FastAPI()
 
 
-@app.get("/")
+@app.get("/moedas")
 def get_all_currencies():
-    return data_base
+    return db_currencies
 
 
-@app.get("/convert/{current_from&current_to&amount}")
-def get_convert_current(currency_from: str, currency_to: str, amount: float):
+@app.get("/conversor/")
+def get_exchange_currency(currency_from: str, currency_to: str, amount: float):
     if not exist_currency(currency_from):
         return {"Status": 404, "Mensagem": f"Moeda {currency_from} não encontrada"}
     if not exist_currency(currency_to):
         return {"Status": 404, "Mensagem": f"Moeda {currency_to} não encontrada"}
-    result = exchange(currency_from, currency_to, amount)
-    converted = {"valor": amount, "de": currency_from, "para": currency_to, "resultado": result}
+    currency_from = find_currency(currency_from)
+    currency_to = find_currency(currency_to)
+    exchange_from_to = exchange(currency_from.code, currency_to.code, 1)
+    exchange_to_from = exchange(currency_to.code, currency_from.code, 1)
+    result = exchange(currency_from.code, currency_to.code, amount)
+    converted = {
+        "valor": amount,
+        "de": {"codigo": currency_from.code, "nome": currency_from.name,
+               "cotacao": exchange_from_to},
+        "para": {"codigo": currency_to.code, "nome": currency_to.name,
+                 "cotacao": exchange_to_from},
+        "resultado": result
+    }
     return converted
