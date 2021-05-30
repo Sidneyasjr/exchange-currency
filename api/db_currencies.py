@@ -6,10 +6,6 @@ response = requests.get("https://economia.awesomeapi.com.br/last/USD,BRL-USD,EUR
 
 content = json.loads(response.content)
 
-print(content)
-# currencies = {"USD": 1, "BRL": content['BRLUSD']['ask'], "EUR": content['EURUSD']['ask'],
-#               "BTC": content['BTCUSD']['ask'], "ETH": content['ETHUSD']['ask']}
-
 db_currencies = [
     Currency(id=1, code="USD", name="Dólar Americano", exchange=1.0),
     Currency(id=2, code="BRL", name="Real Brasileiro", exchange=content['BRLUSD']['ask']),
