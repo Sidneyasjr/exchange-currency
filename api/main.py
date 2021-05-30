@@ -1,3 +1,4 @@
+import uvicorn as uvicorn
 from fastapi import FastAPI
 from api.currencies import data_base
 from api.exchange import exist_currency, exchange
@@ -5,7 +6,7 @@ from api.exchange import exist_currency, exchange
 app = FastAPI()
 
 
-@app.get("/currencies")
+@app.get("/")
 def get_all_currencies():
     return data_base
 
