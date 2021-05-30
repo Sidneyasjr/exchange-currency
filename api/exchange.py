@@ -1,8 +1,8 @@
-from currencies import base_model
+from api.currencies import data_base
 
 
 def exist_currency(currency):
-    for c in base_model:
+    for c in data_base:
         if c.code == currency:
             return True
     return False
@@ -10,7 +10,7 @@ def exist_currency(currency):
 
 def exchange_rate(currency):
     value = 0
-    for c in base_model:
+    for c in data_base:
         if c.code == currency:
             value = float(c.exchange)
     return value

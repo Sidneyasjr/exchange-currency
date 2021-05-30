@@ -1,13 +1,13 @@
 from fastapi import FastAPI
-from currencies import base_model
-from exchange import exchange, exist_currency
+from api.currencies import data_base
+from api.exchange import exist_currency, exchange
 
 app = FastAPI()
 
 
 @app.get("/currencies")
 def get_all_currencies():
-    return base_model
+    return data_base
 
 
 @app.get("/convert/{current_from&current_to&amount}")
